@@ -1,29 +1,6 @@
 app:
   appId: "wx26e9d10cf1c7fc60"
   appSecret: "d358cd1aafea40674e42a6a9f9c486bd"
-spring:
-  druid:
-    initial-size: 10
-    max-active: 100
-    min-idle: 10
-    max-wait: 60000
-    pool-prepared-statements: true
-    max-pool-prepared-statement-per-connection-size: 20
-    time-between-eviction-runs-millis: 60000
-    min-evictable-idle-time-millis: 300000
-    validation-query: SELECT 1 FROM DUAL
-    test-while-idle: true
-    test-on-borrow: false
-    test-on-return: false
-    filter:
-      stat:
-        log-slow-sql: true
-        slow-sql-millis: 1000
-        merge-sql: true
-        enabled: true
-      wall:
-        config:
-          multi-statement-allow: true
 info:
   github: https://github.com/abigail830/time-ticket
   jitpack: https://jitpack.io/#abigail830/time-ticket
