@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.github.abigail830</groupId>
 	<artifactId>time-ticket</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>time-ticket</name>
 	<description>Time ticket wechat backend</description>
 
