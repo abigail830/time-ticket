@@ -30,7 +30,7 @@ public class UserDomainTest {
     }
 
     @AfterClass
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         jdbcTemplate.update("DELETE FROM user_tbl");
     }
 
@@ -38,9 +38,8 @@ public class UserDomainTest {
     public void should_add_user_with_open_id() {
         //given
         String OPENID = "OPENID1";
-        final UserDomain userDomain = new UserDomain(userRepository);
         //when
-        userDomain.addUserByOpenId(OPENID);
+        final UserDomain userDomain = new UserDomain(OPENID, userRepository);
         //then
         assertTrue(userDomain.isExistUser(OPENID));
     }
@@ -49,8 +48,7 @@ public class UserDomainTest {
     public void should_update_user() {
         //given
         String OPENID = "OPENID2";
-        final UserDomain userDomain = new UserDomain(userRepository);
-        userDomain.addUserByOpenId(OPENID);
+        final UserDomain userDomain = new UserDomain(OPENID, userRepository);
         final User updatedUser = User.builder().openId(OPENID).avatarUrl("URL")
                 .city("GZ").country("CN").province("GD")
                 .gender("M").lang("CN").nickName("Sara").build();
