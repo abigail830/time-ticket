@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://123.59.62.104:3306/wxapp_timeticket?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: user_timeticket
+    password: timeticket20190323qaz#
+server:
+  port: 8083
+
+
+
