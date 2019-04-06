@@ -12,4 +12,8 @@ public class UserDomainFactory {
     public UserDomain build() {
         return new UserDomain(userRepository);
     }
+
+    public UserDomain build(String openId) {
+        return new UserDomain(openId, userRepository);
+    }
 }

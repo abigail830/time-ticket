@@ -39,8 +39,7 @@ public class UserApplicationService {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, " Fail to login Wechat backend");
         } else {
             log.info("User {} login Wechat successfully", loginInfo.getOpenid());
-            final UserDomain userDomain = userDomainFactory.build();
-            userDomain.addUserByOpenId(loginInfo.getOpenid());
+            userDomainFactory.build(loginInfo.getOpenid());
         }
 
         return WxLoginInfo.toJson(loginInfo);

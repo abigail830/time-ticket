@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Setter
 @Slf4j
@@ -22,15 +21,16 @@ public class UserRepositoryImpl implements UserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private RowMapper<UserEntity> rowMapper = new BeanPropertyRowMapper<>(UserEntity.class);
+    private RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
 
     @Override
-    public void addUser(User user) {
+    public User addUser(User user) {
         log.info("Going to insert user into DB: {}", user);
         jdbcTemplate.update("INSERT ignore INTO user_tbl (open_id) VALUES (?)", user.getOpenId());
+        return getUserByOpenId(user.getOpenId()).get();
     }
 
-    public void updateUser(User user) {
+    public User updateUser(User user) {
         log.info("Going to update user into DB: {}", user);
         jdbcTemplate.update(
                 "UPDATE user_tbl set gender=?, nick_name=?, city=?, country=?, province=?, lang=?, avatar_url=? where open_id=?",
@@ -43,22 +43,20 @@ public class UserRepositoryImpl implements UserRepository {
                 user.getAvatarUrl(),
                 user.getOpenId()
         );
+        return user;
     }
 
     public Optional<User> getUserByOpenId(String openId) {
-        List<UserEntity> userEntities = jdbcTemplate.query("SELECT * FROM user_tbl WHERE open_id = ?", rowMapper, openId);
-        final List<User> users = userEntities.stream().map(userEntity -> userEntity.toUser()).collect(Collectors.toList());
+        List<User> users = jdbcTemplate.query("SELECT * FROM user_tbl WHERE open_id = ?", rowMapper, openId);
         return users.stream().findFirst();
     }
 
     public Optional<User> getUserById(String id) {
-        List<UserEntity> userEntities = jdbcTemplate.query("SELECT * FROM user_tbl WHERE id = ?", rowMapper, id);
-        final List<User> users = userEntities.stream().map(userEntity -> userEntity.toUser()).collect(Collectors.toList());
+        List<User> users = jdbcTemplate.query("SELECT * FROM user_tbl WHERE id = ?", rowMapper, id);
         return users.stream().findFirst();
     }
 
     public List<User> getAllUsers() {
-        final List<UserEntity> userEntities = jdbcTemplate.query("SELECT * from user_tbl", rowMapper);
-        return userEntities.stream().map(userEntity -> userEntity.toUser()).collect(Collectors.toList());
+        return jdbcTemplate.query("SELECT * from user_tbl", rowMapper);
     }
 }

@@ -5,9 +5,9 @@ import java.util.Optional;
 
 public interface UserRepository {
 
-    void addUser(User user);
+    User addUser(User user);
 
-    void updateUser(User user);
+    User updateUser(User user);
 
     Optional<User> getUserByOpenId(String openId);
 

@@ -11,13 +11,20 @@ public class UserDomain {
 
     private UserRepository userRepository;
 
-    public void addUserByOpenId(String openId) {
-        User user = User.builder().openId(openId).build();
-        userRepository.addUser(user);
+    private User user;
+
+    public UserDomain(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public UserDomain(String openId, UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.user = this.userRepository.addUser(User.builder().openId(openId).build());
     }
 
     public void updateUser(User user) {
-        userRepository.updateUser(user);
+        this.user = user;
+        userRepository.updateUser(this.user);
     }
 
     public boolean isExistUser(String openId) {
