@@ -1,8 +1,7 @@
 package com.github.abigail830.timeticket.domain;
 
+import com.github.abigail830.timeticket.util.http.JsonUtil;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
@@ -10,16 +9,10 @@ import javax.persistence.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-    @Column(nullable = false)
     private String openId;
-
     private String gender;
     private String nickName;
     private String city;
@@ -28,7 +21,11 @@ public class User {
     private String lang;
     private String avatarUrl;
 
-    public User(String openId) {
-        this.openId = openId;
+    public static User fromJson(String json) {
+        return JsonUtil.toObject(json, User.class);
+    }
+
+    public static String toJson(User user) {
+        return JsonUtil.toJson(user);
     }
 }

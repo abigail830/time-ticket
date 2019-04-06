@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Setter
 @Slf4j
@@ -21,7 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+    private RowMapper<UserEntity> rowMapper = new BeanPropertyRowMapper<>(UserEntity.class);
 
     @Override
     public void addUser(User user) {
@@ -45,16 +46,19 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public Optional<User> getUserByOpenId(String openId) {
-        List<User> users = jdbcTemplate.query("SELECT * FROM user_tbl WHERE open_id = ?", rowMapper, openId);
+        List<UserEntity> userEntities = jdbcTemplate.query("SELECT * FROM user_tbl WHERE open_id = ?", rowMapper, openId);
+        final List<User> users = userEntities.stream().map(userEntity -> userEntity.toUser()).collect(Collectors.toList());
         return users.stream().findFirst();
     }
 
     public Optional<User> getUserById(String id) {
-        List<User> users = jdbcTemplate.query("SELECT * FROM user_tbl WHERE id = ?", rowMapper, id);
+        List<UserEntity> userEntities = jdbcTemplate.query("SELECT * FROM user_tbl WHERE id = ?", rowMapper, id);
+        final List<User> users = userEntities.stream().map(userEntity -> userEntity.toUser()).collect(Collectors.toList());
         return users.stream().findFirst();
     }
 
     public List<User> getAllUsers() {
-        return jdbcTemplate.query("SELECT * from user_tbl", rowMapper);
+        final List<UserEntity> userEntities = jdbcTemplate.query("SELECT * from user_tbl", rowMapper);
+        return userEntities.stream().map(userEntity -> userEntity.toUser()).collect(Collectors.toList());
     }
 }
