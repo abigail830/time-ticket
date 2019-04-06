@@ -28,7 +28,4 @@ public class UserDomain {
         return userRepository.getUserByOpenId(openId).get();
     }
 
-    User getUserById(String id) {
-        return userRepository.getUserById(id).get();
-    }
 }
