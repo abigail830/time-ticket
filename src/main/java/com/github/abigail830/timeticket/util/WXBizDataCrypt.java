@@ -13,12 +13,12 @@ import java.util.Map;
 
 public class WXBizDataCrypt {
 
-    private String appid;
+    private String appId;
 
     private String sessionKey;
 
-    public WXBizDataCrypt(String appid, String sessionKey) {
-        this.appid = appid;
+    public WXBizDataCrypt(String appId, String sessionKey) {
+        this.appId = appId;
         this.sessionKey = sessionKey;
     }
 
@@ -58,14 +58,14 @@ public class WXBizDataCrypt {
                 // watermark参数说明：
                 // 参数  类型  说明
                 // watermark   OBJECT  数据水印
-                // appid   String  敏感数据归属appid，开发者可校验此参数与自身appid是否一致
+                // appId   String  敏感数据归属appid，开发者可校验此参数与自身appid是否一致
                 // timestamp   DateInt 敏感数据获取的时间戳, 开发者可以用于数据时效性校验'
 
                 // 根据微信建议：敏感数据归属appid，开发者可校验此参数与自身appid是否一致
-                // if decrypted['watermark']['appid'] != self.appId:
+                // if decrypted['watermark']['appId'] != self.appId:
                 JsonObject jsons = new JsonParser().parse(userInfo).getAsJsonObject();
-                String id = jsons.getAsJsonObject("watermark").get("appid").getAsString();
-                if (!StringUtils.equals(id, appid)) {
+                String id = jsons.getAsJsonObject("watermark").get("appId").getAsString();
+                if (!StringUtils.equals(id, appId)) {
                     Map<String, Object> errorMap = new HashMap<>();
                     errorMap.put("errorCode", "ErrorCode::$IllegalBuffer;");
                     return JsonUtil.toJson(errorMap);

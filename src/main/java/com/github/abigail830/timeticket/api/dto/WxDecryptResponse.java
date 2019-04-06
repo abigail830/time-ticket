@@ -22,6 +22,6 @@ public class WxDecryptResponse {
 
     private String msg;
 
-//    private UserInfo userInfo;
+//    private UserDomain userInfo;
 
 }

@@ -1,15 +1,17 @@
 package com.github.abigail830.timeticket.api;
 
 import com.github.abigail830.timeticket.api.dto.WxDecryptResponse;
-import com.github.abigail830.timeticket.api.dto.WxLoginResponse;
+import com.github.abigail830.timeticket.application.UserApplicationService;
 import com.github.abigail830.timeticket.util.WXBizDataCrypt;
-import com.github.abigail830.timeticket.util.http.HttpClientUtil;
 import com.github.abigail830.timeticket.util.http.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,26 +29,17 @@ public class WxAppController {
     @Value("${app.appSecret}")
     private String appSecret;
 
+    @Autowired
+    UserApplicationService userApplicationService;
+
 
     @GetMapping("/wxLogin")
     public String login(HttpServletRequest request) {
         String code = request.getHeader("X-WX-Code");
-        String resultData = HttpClientUtil.instance().getData(
-                "https://api.weixin.qq.com/sns/jscode2session?appid=" + appId +
-                        "&secret=" + appSecret +
-                        "&grant_type=authorization_code" +
-                        "&js_code=" + code);
-
-        WxLoginResponse wxLoginResponse = JsonUtil.toObject(resultData, WxLoginResponse.class);
-        if (wxLoginResponse.getOpenid() != null) {
-            //TODO: to insert user
-//            userService.createUser(new UserInfo(wxLoginResponse.getOpenid()));
-        } else {
-            log.error("not able to process ws response " + resultData);
-            log.error("Fail to get openID from wechat API");
-        }
-
-        return resultData;
+        if (code == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing X-WX-Code in header");
+        else
+            return userApplicationService.login(code);
     }
 
     @GetMapping("/decrypt")
