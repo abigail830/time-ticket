@@ -35,4 +35,5 @@ public class UserDomain {
         return userRepository.getUserByOpenId(openId).get();
     }
 
+
 }

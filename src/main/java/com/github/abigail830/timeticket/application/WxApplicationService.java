@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Slf4j
-public class UserApplicationService {
+public class WxApplicationService {
 
     @Autowired
     WxDomainFactory wxDomainFactory;

@@ -1,6 +1,6 @@
 package com.github.abigail830.timeticket.api;
 
-import com.github.abigail830.timeticket.application.UserApplicationService;
+import com.github.abigail830.timeticket.application.WxApplicationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 public class WxAppController {
 
     @Autowired
-    UserApplicationService userApplicationService;
+    WxApplicationService wxApplicationService;
 
 
     @GetMapping("/wxLogin")
     public String login(HttpServletRequest request) {
         String code = request.getHeader("X-WX-Code");
-        return userApplicationService.login(code);
+        return wxApplicationService.login(code);
     }
 
     @GetMapping("/decrypt")
@@ -32,7 +32,7 @@ public class WxAppController {
         String skey = request.getHeader("skey");
         String encryptedData = request.getHeader("encryptedData");
         String iv = request.getHeader("iv");
-        return userApplicationService.decrypt(skey, encryptedData, iv);
+        return wxApplicationService.decrypt(skey, encryptedData, iv);
     }
 
 }
