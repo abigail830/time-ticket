@@ -12,11 +12,7 @@ public class TicketService {
     TicketRepository ticketRepository;
 
     public void addTicketIndex(String ownerOpenId, String assigneeRole) {
-        final TicketIndex newIndex = TicketIndex.builder()
-                .ownerOpenId(ownerOpenId)
-                .assigneeRole(assigneeRole)
-                .sumDuration(0L)
-                .build();
+        final TicketIndex newIndex = new TicketIndex(ownerOpenId, assigneeRole);
         ticketRepository.addTicketIndex(newIndex);
     }
 
@@ -28,7 +24,7 @@ public class TicketService {
         ticketRepository.updateAssigneeRoleOfTicketIndex(ticketIndexId, newAssigneeRole);
     }
 
-    public void deleteTicketIndex(Integer ticketIndexId, String ownerOpenId) {
+    public void deleteTicketIndex(Integer ticketIndexId) {
         ticketRepository.removeTicketIndex(ticketIndexId);
     }
 

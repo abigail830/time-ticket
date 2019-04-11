@@ -9,7 +9,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +21,12 @@ public class TicketIndex {
     private Timestamp createTime;
     private Long sumDuration;
     private List<Ticket> ticketList = new ArrayList<>();
+
+    public TicketIndex(String ownerOpenId, String assigneeRole) {
+        this.ownerOpenId = ownerOpenId;
+        this.assigneeRole = assigneeRole;
+        this.sumDuration = 0L;
+    }
 
     public void addTicket(Ticket ticket) {
         this.ticketList.add(ticket);

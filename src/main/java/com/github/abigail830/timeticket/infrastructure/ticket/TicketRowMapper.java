@@ -12,15 +12,15 @@ public class TicketRowMapper implements RowMapper<Ticket> {
     @Override
     public Ticket mapRow(ResultSet resultSet, int i) throws SQLException {
         if (StringUtils.isNotBlank(resultSet.getString("ticket_id"))) {
-            return Ticket.builder()
-                    .id(resultSet.getInt("ticket_id"))
-                    .ticketIndexId(resultSet.getInt("ticket_index_id"))
-                    .event(resultSet.getString("event"))
-                    .eventStatus(resultSet.getString("event_status"))
-                    .duration(resultSet.getLong("duration"))
-                    .createTime(resultSet.getTimestamp("ticket_create_time"))
-                    .lastUpdateTime(resultSet.getTimestamp("ticket_last_update_time"))
-                    .build();
+            return new Ticket(resultSet.getInt("ticket_id"),
+                    resultSet.getInt("ticket_id"),
+                    resultSet.getTimestamp("ticket_create_time"),
+                    resultSet.getTimestamp("ticket_last_update_time"),
+                    resultSet.getString("event_status"),
+                    resultSet.getString("event"),
+                    resultSet.getLong("duration")
+            );
+
         } else {
             return null;
         }

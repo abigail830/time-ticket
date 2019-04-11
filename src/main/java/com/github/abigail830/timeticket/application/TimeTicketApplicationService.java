@@ -27,7 +27,7 @@ public class TimeTicketApplicationService {
     }
 
     public List<TicketIndex> deleteTicketIndex(Integer ticketIndexId, String ownerOpenId) {
-        ticketService.deleteTicketIndex(ticketIndexId, ownerOpenId);
+        ticketService.deleteTicketIndex(ticketIndexId);
         return ticketService.getTicketIndexListByOwner(ownerOpenId);
     }
 

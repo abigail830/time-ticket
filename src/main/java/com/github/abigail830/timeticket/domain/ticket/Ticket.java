@@ -1,12 +1,13 @@
 package com.github.abigail830.timeticket.domain.ticket;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 
 @Getter
-@Setter
-@Builder
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor

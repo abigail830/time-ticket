@@ -1,8 +1,10 @@
 package com.github.abigail830.timeticket.util;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class DefaultEncryptorTest {
 
     DefaultEncryptor encryptor;
