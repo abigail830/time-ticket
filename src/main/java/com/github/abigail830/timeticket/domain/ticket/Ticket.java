@@ -1,13 +1,11 @@
 package com.github.abigail830.timeticket.domain.ticket;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Getter
+@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,7 +28,14 @@ public class Ticket {
         this.duration = duration;
     }
 
-    private enum TICKET_STATUS {
+    public Ticket(Integer ticketIndexId, Integer id, String event, Long duration) {
+        this.ticketIndexId = ticketIndexId;
+        this.id = id;
+        this.event = event;
+        this.duration = duration;
+    }
+
+    public enum TICKET_STATUS {
         NEW,
         CONFIRMED
     }

@@ -28,6 +28,14 @@ public class TicketIndex {
         this.sumDuration = 0L;
     }
 
+    public TicketIndex(Integer id, String ownerOpenId, String assigneeRole, Timestamp createTime, Long sumDuration) {
+        this.id = id;
+        this.ownerOpenId = ownerOpenId;
+        this.assigneeRole = assigneeRole;
+        this.createTime = createTime;
+        this.sumDuration = sumDuration;
+    }
+
     public void addTicket(Ticket ticket) {
         this.ticketList.add(ticket);
     }

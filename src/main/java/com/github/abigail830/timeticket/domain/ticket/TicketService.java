@@ -1,9 +1,13 @@
 package com.github.abigail830.timeticket.domain.ticket;
 
+import com.github.abigail830.timeticket.infrastructure.InfraException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TicketService {
@@ -30,7 +34,29 @@ public class TicketService {
 
     public void addTicketDetail(Integer timeIndexId, String event, Long duration) {
         final Ticket newTicket = new Ticket(timeIndexId, event, duration);
-        ticketRepository.addTicketToIndex(timeIndexId, newTicket);
+        try {
+            ticketRepository.addTicketToIndex(timeIndexId, newTicket);
+        } catch (InfraException ex) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+        }
+
+    }
+
+    public void updateTicketDetail(Integer timeIndexId, Integer ticketId, String event, Long duration) {
+        final Ticket newTicket = new Ticket(timeIndexId, ticketId, event, duration);
+        ticketRepository.updateTicket(ticketId, newTicket);
+    }
+
+    public boolean isTicketAcceptUpdate(Integer ticketId) {
+
+        final Optional<Ticket> ticketById = ticketRepository.getTicketById(ticketId);
+        if (ticketById.isPresent()
+                && ticketById.get().getId() != null
+                && ticketById.get().getEventStatus().equals(Ticket.TICKET_STATUS.NEW.name()))
+            return true;
+        else
+            return false;
+
     }
 
     public List<Ticket> getAllTickets() {
@@ -40,4 +66,6 @@ public class TicketService {
     public TicketIndex getTicketDetailListByIndexId(Integer timeIndexId) {
         return ticketRepository.getTicketDetailListByIndexId(timeIndexId);
     }
+
+
 }

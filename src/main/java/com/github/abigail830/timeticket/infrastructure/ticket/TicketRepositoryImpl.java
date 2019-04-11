@@ -4,9 +4,11 @@ import com.github.abigail830.timeticket.domain.User;
 import com.github.abigail830.timeticket.domain.ticket.Ticket;
 import com.github.abigail830.timeticket.domain.ticket.TicketIndex;
 import com.github.abigail830.timeticket.domain.ticket.TicketRepository;
+import com.github.abigail830.timeticket.infrastructure.InfraException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -24,10 +27,11 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private RowMapper<TicketIndex> ticketIndexRowMapper = new BeanPropertyRowMapper<>(TicketIndex.class);
+    private RowMapper<TicketIndex> rawTicketIndexRowMapper = new BeanPropertyRowMapper<>(TicketIndex.class);
+    private RowMapper<Ticket> rawTicketRowMapper = new BeanPropertyRowMapper<>(Ticket.class);
 
+    private RowMapper<TicketIndex> ticketIndexRowMapper = new TicketIndexRowMapper();
     private RowMapper<Ticket> ticketRowMapper = new TicketRowMapper();
-
     private RowMapper<User> userRowMapper = new UserRowMapper();
 
 
@@ -58,25 +62,36 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public List<TicketIndex> getTicketIndexByOwnerOpenIdOrderBySumDuration(String ownerOpenId) {
         List<TicketIndex> ticketIndexList = jdbcTemplate.query(
-                "SELECT * FROM ticket_index_tbl WHERE owner_open_id = ?", ticketIndexRowMapper, ownerOpenId);
+                "SELECT * FROM ticket_index_tbl WHERE owner_open_id = ?", rawTicketIndexRowMapper, ownerOpenId);
         return ticketIndexList;
     }
 
     @Override
     public void addTicketToIndex(Integer ticketIndexId, Ticket ticket) {
-        jdbcTemplate.update(
-                "INSERT INTO ticket_tbl (event, event_status, duration, ticket_index_id) VALUES (?,?,?,?)",
-                ticket.getEvent(),
-                ticket.getEventStatus(),
-                ticket.getDuration(),
-                ticket.getTicketIndexId()
-        );
-        log.info("Created Ticket {}", ticket.toString());
+        try {
+            jdbcTemplate.update(
+                    "INSERT INTO ticket_tbl (event, event_status, duration, ticket_index_id) VALUES (?,?,?,?)",
+                    ticket.getEvent(),
+                    ticket.getEventStatus(),
+                    ticket.getDuration(),
+                    ticket.getTicketIndexId()
+            );
+            log.info("Created Ticket {}", ticket.toString());
+        } catch (DataIntegrityViolationException ex) {
+            log.warn("DataIntegrityViolationException happened. \n {}", ex);
+            throw new InfraException("DataIntegrityViolationException: Ticket Index not exist", ex.getCause());
+        } catch (Exception e) {
+            log.warn("Generic exception happened. \n {}", e);
+            throw new InfraException("GenericException", e.getCause());
+        }
     }
 
     @Override
     public void updateTicket(Integer ticketId, Ticket ticket) {
-
+        jdbcTemplate.update("UPDATE ticket_tbl set event=?, duration=?  where ID=?",
+                ticket.getEvent(), ticket.getDuration(),
+                ticketId);
+        log.info("Updated Ticket {} with new content {}", ticketId, ticket);
     }
 
     @Override
@@ -86,7 +101,7 @@ public class TicketRepositoryImpl implements TicketRepository {
 
     @Override
     public List<Ticket> getAllTickets() {
-        final List<Ticket> ticketList = jdbcTemplate.query("SELECT * FROM ticket_index_tbl", ticketRowMapper);
+        final List<Ticket> ticketList = jdbcTemplate.query("SELECT * FROM ticket_tbl", rawTicketRowMapper);
         return ticketList;
     }
 
@@ -144,6 +159,13 @@ public class TicketRepositoryImpl implements TicketRepository {
 
 
         return ticketIndex;
+    }
+
+    @Override
+    public Optional<Ticket> getTicketById(Integer ticketId) {
+        final List<Ticket> tickets = jdbcTemplate.query("SELECT * FROM ticket_tbl WHERE ID = ?",
+                rawTicketRowMapper, ticketId);
+        return tickets.stream().findFirst();
     }
 
 

@@ -1,6 +1,7 @@
 package com.github.abigail830.timeticket.domain.ticket;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TicketRepository {
 
@@ -21,4 +22,6 @@ public interface TicketRepository {
     List<Ticket> getAllTickets();
 
     TicketIndex getTicketDetailListByIndexId(Integer timeIndexId);
+
+    Optional<Ticket> getTicketById(Integer ticketId);
 }

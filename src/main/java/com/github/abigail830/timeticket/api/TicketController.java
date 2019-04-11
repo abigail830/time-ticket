@@ -1,9 +1,6 @@
 package com.github.abigail830.timeticket.api;
 
-import com.github.abigail830.timeticket.api.request.CreateRoleRequest;
-import com.github.abigail830.timeticket.api.request.CreateTicketDetailRequest;
-import com.github.abigail830.timeticket.api.request.DeleteRoleRequest;
-import com.github.abigail830.timeticket.api.request.UpdateRoleRequest;
+import com.github.abigail830.timeticket.api.request.*;
 import com.github.abigail830.timeticket.api.response.TicketDetailListResponse;
 import com.github.abigail830.timeticket.api.response.TicketIndexResponse;
 import com.github.abigail830.timeticket.application.TimeTicketApplicationService;
@@ -78,6 +75,19 @@ public class TicketController {
                 createTicketDetailRequest.getTimeIndexId(),
                 createTicketDetailRequest.getEvent(),
                 createTicketDetailRequest.getDuration());
+
+        return TicketDetailListResponse.fromTicketIndex(ticketIndex);
+    }
+
+    @PutMapping("/detail")
+    public TicketDetailListResponse updateTicketDetail(
+            @RequestBody UpdateTicketDetailRequest updateTicketDetailRequest) {
+
+        final TicketIndex ticketIndex = timeTicketApplicationService.updateTicketDetail(
+                updateTicketDetailRequest.getTimeIndexId(),
+                updateTicketDetailRequest.getTicketId(),
+                updateTicketDetailRequest.getEvent(),
+                updateTicketDetailRequest.getDuration());
 
         return TicketDetailListResponse.fromTicketIndex(ticketIndex);
     }

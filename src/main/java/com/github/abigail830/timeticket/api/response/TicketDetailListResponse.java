@@ -39,6 +39,9 @@ public class TicketDetailListResponse {
 
     public static TicketDetailListResponse fromTicketIndex(TicketIndex ticketIndex) {
 
+        if (ticketIndex == null)
+            return new TicketDetailListResponse();
+
         List<TicketDetailResponse> ticketResponses = new ArrayList<>();
         if (ticketIndex.getTicketList() != null && !ticketIndex.getTicketList().isEmpty()) {
             ticketResponses = ticketIndex.getTicketList().stream()
