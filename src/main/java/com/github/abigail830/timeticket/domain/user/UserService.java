@@ -2,6 +2,8 @@ package com.github.abigail830.timeticket.domain.user;
 
 import com.github.abigail830.timeticket.infrastructure.InfraException;
 import com.github.abigail830.timeticket.util.AESUtils;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -46,37 +48,31 @@ public class UserService {
     public User decryptUser(String appId, String skey, String encryptedData, String iv) {
 
         validateInputBeforeDecrypt(skey, iv);
-
         byte[] aesKey = Base64.decodeBase64(skey);
         byte[] aesIV = Base64.decodeBase64(iv);
         byte[] aesCipher = Base64.decodeBase64(encryptedData);
 
         try {
             byte[] resultByte = AESUtils.decrypt(aesCipher, aesKey, aesIV);
-
             if (null != resultByte && resultByte.length > 0) {
                 String userInfo = new String(resultByte, "UTF-8");
+                //validateWatermark(userInfo, appId);
                 return User.fromJson(userInfo);
-
-//                watermark validation
-//                log.info("userinfo after decrypt is {}", userInfo);
-//                JsonObject jsons = new JsonParser().parse(userInfo).getAsJsonObject();
-//                String id = jsons.getAsJsonObject("watermark").get("appId").getAsString();
-//                if (!StringUtils.equals(id, appId)) {
-//                    throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, " Illegal Buffer");
-//                } else {
-//                    return User.fromJson(userInfo);
-//                }
             } else {
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Decrypted Fail");
             }
-
         } catch (InvalidAlgorithmParameterException | UnsupportedEncodingException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Decrypted Fail");
         }
-//        catch (NullPointerException ex){
-//            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "watermark missing in decrypt object");
-//        }
+    }
+
+    private void validateWatermark(String userInfo, String appId) {
+        log.info("userinfo after decrypt is {}", userInfo);
+        JsonObject jsons = new JsonParser().parse(userInfo).getAsJsonObject();
+        String id = jsons.getAsJsonObject("watermark").get("appId").getAsString();
+        if (!StringUtils.equals(id, appId)) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, " Illegal Buffer");
+        }
     }
 
     private void validateInputBeforeDecrypt(String skey, String iv) {
