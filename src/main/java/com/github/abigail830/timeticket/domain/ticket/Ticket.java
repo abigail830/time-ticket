@@ -35,6 +35,14 @@ public class Ticket {
         this.duration = duration;
     }
 
+    public boolean isAllowUpdate() {
+        if (this.eventStatus.equals(Ticket.TICKET_STATUS.NEW.name())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public enum TICKET_STATUS {
         NEW,
         CONFIRMED

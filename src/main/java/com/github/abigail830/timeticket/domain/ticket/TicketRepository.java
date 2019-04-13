@@ -13,9 +13,9 @@ public interface TicketRepository {
 
     List<TicketIndex> getTicketIndexByOwnerOpenIdOrderBySumDuration(String ownerOpenId);
 
-    void addTicketToIndex(Integer ticketIndexId, Ticket ticket);
+    void addTicketToIndex(Ticket ticket);
 
-    void updateTicket(Integer ticketId, Ticket ticket);
+    void updateTicket(Ticket ticket);
 
     void removeTicket(Integer ticketId);
 

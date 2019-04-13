@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @ApiModel("TimeDetail列表")
 public class TicketDetailListResponse {
 
-    @ApiModelProperty(value = "Time Index Id", example = "1")
+    @ApiModelProperty(value = "Ticket Index Id", example = "1")
     private Integer id;
 
     @ApiModelProperty(value = "本尊OpenId", example = "oEmJ75YWmBSDgyz4KLi_yGL8MBV4ue")

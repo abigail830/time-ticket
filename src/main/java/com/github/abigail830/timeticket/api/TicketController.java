@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * 小程序相关登录和解密接口
- */
+
 @RestController
 @RequestMapping("/tickets")
 @Slf4j
@@ -90,6 +88,17 @@ public class TicketController {
                 updateTicketDetailRequest.getDuration());
 
         return TicketDetailListResponse.fromTicketIndex(ticketIndex);
+    }
+
+    @DeleteMapping("/detail")
+    public TicketDetailListResponse deleteTicketDetail(
+            @RequestBody DeleteTicketDetailRequest deleteTicketDetailRequest) {
+        final TicketIndex ticketIndex = timeTicketApplicationService.deleteTicketDetail(
+                deleteTicketDetailRequest.getTicketIndexId(),
+                deleteTicketDetailRequest.getTicketId());
+
+        return TicketDetailListResponse.fromTicketIndex(ticketIndex);
+
     }
 
 }

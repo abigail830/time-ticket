@@ -2,6 +2,7 @@ package com.github.abigail830.timeticket.application;
 
 import com.github.abigail830.timeticket.domain.ticket.Ticket;
 import com.github.abigail830.timeticket.domain.ticket.TicketIndex;
+import com.github.abigail830.timeticket.domain.ticket.TicketRepository;
 import com.github.abigail830.timeticket.domain.ticket.TicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,12 @@ import java.util.List;
 @Slf4j
 public class TimeTicketApplicationService {
 
+    private TicketService ticketService;
+
     @Autowired
-    TicketService ticketService;
+    public TimeTicketApplicationService(TicketRepository ticketRepository) {
+        this.ticketService = new TicketService(ticketRepository);
+    }
 
     public List<TicketIndex> createTicketIndex(String ownerOpenId, String assigneeRole) {
         ticketService.addTicketIndex(ownerOpenId, assigneeRole);
@@ -46,12 +51,17 @@ public class TimeTicketApplicationService {
         return ticketService.getAllTickets();
     }
 
-    public TicketIndex updateTicketDetail(Integer timeIndexId, Integer ticketId, String event, Long duration) {
+    public TicketIndex updateTicketDetail(Integer ticketIndexId, Integer ticketId, String event, Long duration) {
         if (!ticketService.isTicketAcceptUpdate(ticketId)) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Ticket is not allowed for update");
         } else {
-            ticketService.updateTicketDetail(timeIndexId, ticketId, event, duration);
-            return ticketService.getTicketDetailListByIndexId(timeIndexId);
+            ticketService.updateTicketDetail(ticketIndexId, ticketId, event, duration);
+            return ticketService.getTicketDetailListByIndexId(ticketIndexId);
         }
+    }
+
+    public TicketIndex deleteTicketDetail(Integer ticketIndexId, Integer ticketId) {
+        ticketService.deleteTicket(ticketId);
+        return ticketService.getTicketDetailListByIndexId(ticketIndexId);
     }
 }
