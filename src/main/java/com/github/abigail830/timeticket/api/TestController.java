@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * 小程序相关登录和解密接口
  */
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/test-only")
 @Slf4j
 public class TestController {
 

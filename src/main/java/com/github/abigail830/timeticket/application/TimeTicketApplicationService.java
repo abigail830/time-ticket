@@ -17,38 +17,40 @@ import java.util.List;
 public class TimeTicketApplicationService {
 
     private TicketService ticketService;
+    private TicketRepository ticketRepository;
 
     @Autowired
     public TimeTicketApplicationService(TicketRepository ticketRepository) {
         this.ticketService = new TicketService(ticketRepository);
+        this.ticketRepository = ticketRepository;
     }
 
     public List<TicketIndex> createTicketIndex(String ownerOpenId, String assigneeRole) {
         ticketService.addTicketIndex(ownerOpenId, assigneeRole);
-        return ticketService.getTicketIndexListByOwner(ownerOpenId);
+        return ticketRepository.getTicketIndexByOwnerOpenIdOrderBySumDuration(ownerOpenId);
     }
 
     public List<TicketIndex> updateTicketIndex(Integer ticketIndexId, String ownerOpenId, String newAssigneeRole) {
         ticketService.updateTicketIndex(ticketIndexId, newAssigneeRole);
-        return ticketService.getTicketIndexListByOwner(ownerOpenId);
+        return ticketRepository.getTicketIndexByOwnerOpenIdOrderBySumDuration(ownerOpenId);
     }
 
     public List<TicketIndex> deleteTicketIndex(Integer ticketIndexId, String ownerOpenId) {
         ticketService.deleteTicketIndex(ticketIndexId);
-        return ticketService.getTicketIndexListByOwner(ownerOpenId);
+        return ticketRepository.getTicketIndexByOwnerOpenIdOrderBySumDuration(ownerOpenId);
     }
 
     public List<TicketIndex> getTicketIndexByOwner(String ownerOpenId) {
-        return ticketService.getTicketIndexListByOwner(ownerOpenId);
+        return ticketRepository.getTicketIndexByOwnerOpenIdOrderBySumDuration(ownerOpenId);
     }
 
     public TicketIndex createTicketDetail(Integer timeIndexId, String event, Long duration) {
         ticketService.addTicketDetail(timeIndexId, event, duration);
-        return ticketService.getTicketDetailListByIndexId(timeIndexId);
+        return ticketRepository.getTicketDetailListByIndexId(timeIndexId);
     }
 
     public List<Ticket> getAllTickets() {
-        return ticketService.getAllTickets();
+        return ticketRepository.getAllTickets();
     }
 
     public TicketIndex updateTicketDetail(Integer ticketIndexId, Integer ticketId, String event, Long duration) {
@@ -56,12 +58,12 @@ public class TimeTicketApplicationService {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Ticket is not allowed for update");
         } else {
             ticketService.updateTicketDetail(ticketIndexId, ticketId, event, duration);
-            return ticketService.getTicketDetailListByIndexId(ticketIndexId);
+            return ticketRepository.getTicketDetailListByIndexId(ticketIndexId);
         }
     }
 
     public TicketIndex deleteTicketDetail(Integer ticketIndexId, Integer ticketId) {
         ticketService.deleteTicket(ticketId);
-        return ticketService.getTicketDetailListByIndexId(ticketIndexId);
+        return ticketRepository.getTicketDetailListByIndexId(ticketIndexId);
     }
 }

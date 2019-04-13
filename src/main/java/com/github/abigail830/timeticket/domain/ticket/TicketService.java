@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -22,10 +21,6 @@ public class TicketService {
     public void addTicketIndex(String ownerOpenId, String assigneeRole) {
         final TicketIndex newIndex = new TicketIndex(ownerOpenId, assigneeRole);
         ticketRepository.addTicketIndex(newIndex);
-    }
-
-    public List<TicketIndex> getTicketIndexListByOwner(String ownerOpenId) {
-        return ticketRepository.getTicketIndexByOwnerOpenIdOrderBySumDuration(ownerOpenId);
     }
 
     public void updateTicketIndex(Integer ticketIndexId, String newAssigneeRole) {
@@ -59,13 +54,6 @@ public class TicketService {
             return false;
     }
 
-    public List<Ticket> getAllTickets() {
-        return ticketRepository.getAllTickets();
-    }
-
-    public TicketIndex getTicketDetailListByIndexId(Integer timeIndexId) {
-        return ticketRepository.getTicketDetailListByIndexId(timeIndexId);
-    }
 
     public void deleteTicket(Integer ticketId) {
         ticketRepository.removeTicket(ticketId);
