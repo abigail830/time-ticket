@@ -24,12 +24,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void addUserByOpenId(String openId) {
-        log.info("Going to insert client into DB with openId: {}", openId);
         jdbcTemplate.update("INSERT ignore INTO user_tbl (open_id) VALUES (?)", openId);
+        log.info("Inserted User into DB with openId: {}", openId);
     }
 
     public User updateUser(User user) {
-        log.info("Going to update client into DB: {}", user);
         jdbcTemplate.update(
                 "UPDATE user_tbl set gender=?, nick_name=?, city=?, country=?, province=?, lang=?, avatar_url=? where open_id=?",
                 user.getGender(),
@@ -41,6 +40,7 @@ public class UserRepositoryImpl implements UserRepository {
                 user.getAvatarUrl(),
                 user.getOpenId()
         );
+        log.info("Updated User into DB: {}", user);
         return user;
     }
 
@@ -50,7 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     public Optional<User> getUserById(String id) {
-        List<User> users = jdbcTemplate.query("SELECT * FROM user_tbl WHERE id = ?", rowMapper, id);
+        List<User> users = jdbcTemplate.query("SELECT * FROM user_tbl WHERE ID = ?", rowMapper, id);
         return users.stream().findFirst();
     }
 

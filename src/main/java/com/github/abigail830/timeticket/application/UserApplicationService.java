@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class UserApplicationService {
@@ -53,12 +55,21 @@ public class UserApplicationService {
     public User decrypt(String skey, String encryptedData, String iv) {
         final User newUser = userService.decryptUser(appId, skey, encryptedData, iv);
         userService.updateUser(newUser);
-
         return newUser;
+    }
 
+    public List<User> getAllUsers() {
+        return userInfrastructure.getAllUsers();
+    }
+
+    public User getUserByOpenId(String openId) {
+        return userInfrastructure.getUserByOpenId(openId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
 
 
-
-
+    public User getUserById(String id) {
+        return userInfrastructure.getUserById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    }
 }
