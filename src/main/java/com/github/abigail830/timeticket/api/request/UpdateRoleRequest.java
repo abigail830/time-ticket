@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("更新角色请求")
+@ApiModel(description = "更新角色请求")
 public class UpdateRoleRequest {
 
     @ApiModelProperty(value = "Ticket Index Id", example = "1")

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("TimeDetail列表")
+@ApiModel(description = "TimeDetail列表")
 public class TicketDetailListResponse {
 
     @ApiModelProperty(value = "Ticket Index Id", example = "1")

@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("用户登陆返回")
+@ApiModel(description = "用户登陆返回")
 public class UserLoginResponse {
 
     private String session_key;

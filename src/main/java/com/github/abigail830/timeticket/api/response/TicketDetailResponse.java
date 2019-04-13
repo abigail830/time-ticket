@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("Time Detail")
+@ApiModel(description = "Time Detail")
 public class TicketDetailResponse {
 
     private Integer id;

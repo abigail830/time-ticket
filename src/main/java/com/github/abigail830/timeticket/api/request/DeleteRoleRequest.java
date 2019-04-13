@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("删除角色请求")
+@ApiModel(description = "删除角色请求")
 public class DeleteRoleRequest {
 
     @ApiModelProperty(value = "Ticket Index Id", example = "1")

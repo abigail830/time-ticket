@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("TimeIndex首页列表")
+@ApiModel(description = "TimeIndex首页列表")
 public class TicketIndexResponse {
 
     @ApiModelProperty(value = "Time Index Id", example = "1")

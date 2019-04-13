@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/tickets/detail")
 @Slf4j
-@Api(description = "角色时间累计列表页面相关操作API")
+@Api(description = "某角色时间小票列表页面相关操作API")
 public class TicketDetailController {
 
     @Autowired

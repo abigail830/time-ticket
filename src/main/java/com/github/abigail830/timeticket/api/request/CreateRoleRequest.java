@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("创建角色请求")
+@ApiModel(description = "创建角色请求")
 public class CreateRoleRequest {
 
     @ApiModelProperty(value = "本尊OpenId", example = "oEmJ75YWmBSDgyz4KLi_yGL8MBV4ue")

@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel("创建时间事件请求")
+@ApiModel(description = "创建时间事件请求")
 public class CreateTicketDetailRequest {
 
     @ApiModelProperty(value = "Time Index Id", example = "1")
