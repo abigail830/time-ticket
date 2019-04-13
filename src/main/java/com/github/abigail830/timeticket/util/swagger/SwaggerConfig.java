@@ -32,8 +32,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Time repository backend")
-                .description("Time repository wechat mini app backend")
+                .title("Time ticket backend")
+                .description("Time ticket wechat mini app backend")
                 .contact(new Contact("SaraQian", null, "abigail830@163.com"))
                 .version("0.0.1")// 版本号
                 .build();
