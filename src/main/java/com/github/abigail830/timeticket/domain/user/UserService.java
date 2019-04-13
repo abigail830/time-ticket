@@ -2,8 +2,7 @@ package com.github.abigail830.timeticket.domain.user;
 
 import com.github.abigail830.timeticket.infrastructure.InfraException;
 import com.github.abigail830.timeticket.util.AESUtils;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 
+@Slf4j
 public class UserService {
 
     private UserInfrastructure userInfrastructure;
@@ -56,13 +56,17 @@ public class UserService {
 
             if (null != resultByte && resultByte.length > 0) {
                 String userInfo = new String(resultByte, "UTF-8");
-                JsonObject jsons = new JsonParser().parse(userInfo).getAsJsonObject();
-                String id = jsons.getAsJsonObject("watermark").get("appId").getAsString();
-                if (!StringUtils.equals(id, appId)) {
-                    throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, " Illegal Buffer");
-                } else {
-                    return User.fromJson(userInfo);
-                }
+                return User.fromJson(userInfo);
+
+//                watermark validation
+//                log.info("userinfo after decrypt is {}", userInfo);
+//                JsonObject jsons = new JsonParser().parse(userInfo).getAsJsonObject();
+//                String id = jsons.getAsJsonObject("watermark").get("appId").getAsString();
+//                if (!StringUtils.equals(id, appId)) {
+//                    throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, " Illegal Buffer");
+//                } else {
+//                    return User.fromJson(userInfo);
+//                }
             } else {
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Decrypted Fail");
             }
@@ -70,6 +74,9 @@ public class UserService {
         } catch (InvalidAlgorithmParameterException | UnsupportedEncodingException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Decrypted Fail");
         }
+//        catch (NullPointerException ex){
+//            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "watermark missing in decrypt object");
+//        }
     }
 
     private void validateInputBeforeDecrypt(String skey, String iv) {
