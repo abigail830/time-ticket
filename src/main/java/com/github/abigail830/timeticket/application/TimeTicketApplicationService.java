@@ -46,7 +46,7 @@ public class TimeTicketApplicationService {
 
     public TicketIndex createTicketDetail(Integer timeIndexId, String event, Long duration) {
         ticketService.addTicketDetail(timeIndexId, event, duration);
-        return ticketRepository.getTicketDetailListByIndexId(timeIndexId);
+        return ticketRepository.getTicketDetailByIndexId(timeIndexId);
     }
 
     public List<Ticket> getAllTickets() {
@@ -58,12 +58,16 @@ public class TimeTicketApplicationService {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Ticket is not allowed for update");
         } else {
             ticketService.updateTicketDetail(ticketIndexId, ticketId, event, duration);
-            return ticketRepository.getTicketDetailListByIndexId(ticketIndexId);
+            return ticketRepository.getTicketDetailByIndexId(ticketIndexId);
         }
     }
 
     public TicketIndex deleteTicketDetail(Integer ticketIndexId, Integer ticketId) {
         ticketService.deleteTicket(ticketId);
-        return ticketRepository.getTicketDetailListByIndexId(ticketIndexId);
+        return ticketRepository.getTicketDetailByIndexId(ticketIndexId);
+    }
+
+    public TicketIndex getTicketDetailByTicketIndexId(Integer ticketIndexId) {
+        return ticketRepository.getTicketDetailByIndexId(ticketIndexId);
     }
 }

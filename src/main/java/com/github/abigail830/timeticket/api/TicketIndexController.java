@@ -1,10 +1,13 @@
 package com.github.abigail830.timeticket.api;
 
-import com.github.abigail830.timeticket.api.request.*;
-import com.github.abigail830.timeticket.api.response.TicketDetailListResponse;
+import com.github.abigail830.timeticket.api.request.CreateRoleRequest;
+import com.github.abigail830.timeticket.api.request.DeleteRoleRequest;
+import com.github.abigail830.timeticket.api.request.UpdateRoleRequest;
 import com.github.abigail830.timeticket.api.response.TicketIndexResponse;
 import com.github.abigail830.timeticket.application.TimeTicketApplicationService;
 import com.github.abigail830.timeticket.domain.ticket.TicketIndex;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +17,16 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/tickets")
+@RequestMapping("/tickets/indexes")
 @Slf4j
-public class TicketController {
+@Api(description = "首页角色列表相关操作API")
+public class TicketIndexController {
 
     @Autowired
     TimeTicketApplicationService timeTicketApplicationService;
 
-    @PostMapping("/indexes")
+    @ApiOperation(value = "添加角色")
+    @PostMapping
     public List<TicketIndexResponse> createTicketIndex(
             @RequestBody CreateRoleRequest createRoleRequest) {
 
@@ -32,7 +37,8 @@ public class TicketController {
         return domainList.stream().map(TicketIndexResponse::fromTicketIndex).collect(Collectors.toList());
     }
 
-    @PutMapping("/indexes")
+    @ApiOperation(value = "修改角色")
+    @PutMapping
     public List<TicketIndexResponse> updateTicketIndex(
             @RequestBody UpdateRoleRequest updateRoleRequest) {
 
@@ -45,7 +51,8 @@ public class TicketController {
         return domainList.stream().map(TicketIndexResponse::fromTicketIndex).collect(Collectors.toList());
     }
 
-    @DeleteMapping("/indexes")
+    @ApiOperation(value = "删除角色")
+    @DeleteMapping
     public List<TicketIndexResponse> deleteTicketIndex(
             @RequestBody DeleteRoleRequest deleteRoleRequest) {
 
@@ -57,48 +64,13 @@ public class TicketController {
         return indexList.stream().map(TicketIndexResponse::fromTicketIndex).collect(Collectors.toList());
     }
 
-    @GetMapping("/indexes")
+    @ApiOperation(value = "首页角色列表查询")
+    @GetMapping
     public List<TicketIndexResponse> getTicketIndexByOwner(
             @RequestParam String ownerOpenId) {
 
         final List<TicketIndex> ticketIndexByOwner = timeTicketApplicationService.getTicketIndexByOwner(ownerOpenId);
         return ticketIndexByOwner.stream().map(TicketIndexResponse::fromTicketIndex).collect(Collectors.toList());
-    }
-
-    @PostMapping("/detail")
-    public TicketDetailListResponse createTicketDetail(
-            @RequestBody CreateTicketDetailRequest createTicketDetailRequest) {
-
-        final TicketIndex ticketIndex = timeTicketApplicationService.createTicketDetail(
-                createTicketDetailRequest.getTimeIndexId(),
-                createTicketDetailRequest.getEvent(),
-                createTicketDetailRequest.getDuration());
-
-        return TicketDetailListResponse.fromTicketIndex(ticketIndex);
-    }
-
-    @PutMapping("/detail")
-    public TicketDetailListResponse updateTicketDetail(
-            @RequestBody UpdateTicketDetailRequest updateTicketDetailRequest) {
-
-        final TicketIndex ticketIndex = timeTicketApplicationService.updateTicketDetail(
-                updateTicketDetailRequest.getTimeIndexId(),
-                updateTicketDetailRequest.getTicketId(),
-                updateTicketDetailRequest.getEvent(),
-                updateTicketDetailRequest.getDuration());
-
-        return TicketDetailListResponse.fromTicketIndex(ticketIndex);
-    }
-
-    @DeleteMapping("/detail")
-    public TicketDetailListResponse deleteTicketDetail(
-            @RequestBody DeleteTicketDetailRequest deleteTicketDetailRequest) {
-        final TicketIndex ticketIndex = timeTicketApplicationService.deleteTicketDetail(
-                deleteTicketDetailRequest.getTicketIndexId(),
-                deleteTicketDetailRequest.getTicketId());
-
-        return TicketDetailListResponse.fromTicketIndex(ticketIndex);
-
     }
 
 }

@@ -76,7 +76,7 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
-    public TicketIndex getTicketDetailListByIndexId(Integer ticketIndexId) {
+    public TicketIndex getTicketDetailByIndexId(Integer ticketIndexId) {
         return complexTicketIndexRepository.getTicketDetailListByIndexId(ticketIndexId);
     }
 

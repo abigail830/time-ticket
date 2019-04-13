@@ -21,7 +21,7 @@ public interface TicketRepository {
 
     List<Ticket> getAllTickets();
 
-    TicketIndex getTicketDetailListByIndexId(Integer timeIndexId);
+    TicketIndex getTicketDetailByIndexId(Integer timeIndexId);
 
     Optional<Ticket> getTicketById(Integer ticketId);
 }
