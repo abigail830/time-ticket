@@ -15,14 +15,10 @@ import java.security.InvalidAlgorithmParameterException;
 
 public class UserService {
 
-    private String appId;
-    private String appSecret;
     private UserInfrastructure userInfrastructure;
 
     @Autowired
-    public UserService(String appId, String appSecret, UserInfrastructure userInfrastructure) {
-        this.appId = appId;
-        this.appSecret = appSecret;
+    public UserService(UserInfrastructure userInfrastructure) {
         this.userInfrastructure = userInfrastructure;
     }
 
@@ -38,7 +34,7 @@ public class UserService {
         return userInfrastructure.getUserByOpenId(openId).isPresent();
     }
 
-    public User login(String headerCode) {
+    public User login(String appId, String appSecret, String headerCode) {
         try {
             return userInfrastructure.login(appId, appSecret, headerCode);
         } catch (InfraException ex) {
@@ -47,7 +43,7 @@ public class UserService {
         }
     }
 
-    public User decryptUser(String skey, String encryptedData, String iv) {
+    public User decryptUser(String appId, String skey, String encryptedData, String iv) {
 
         validateInputBeforeDecrypt(skey, iv);
 

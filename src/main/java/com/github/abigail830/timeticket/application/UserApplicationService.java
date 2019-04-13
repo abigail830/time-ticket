@@ -16,8 +16,7 @@ public class UserApplicationService {
 
     private final UserService userService;
 
-    @Autowired
-    UserInfrastructure userInfrastructure;
+    private UserInfrastructure userInfrastructure;
 
     @Value("${app.appId}")
     private String appId;
@@ -25,14 +24,19 @@ public class UserApplicationService {
     @Value("${app.appSecret}")
     private String appSecret;
 
+    @Autowired
     public UserApplicationService(UserInfrastructure userInfrastructure) {
         this.userInfrastructure = userInfrastructure;
-        this.userService = new UserService(appId, appSecret, userInfrastructure);
+        this.userService = new UserService(userInfrastructure);
+
     }
 
     public User login(String headerCode) {
+
         validHeaderCode(headerCode);
-        final User user = userService.login(headerCode);
+        log.debug("UserApplicationService.login with : appId={}, appSecret={}", appId, appSecret);
+
+        final User user = userService.login(appId, appSecret, headerCode);
         if (user.isLoginSuccess()) {
             userService.addUserByOpenId(user.getOpenId());
             return user;
@@ -47,7 +51,7 @@ public class UserApplicationService {
 
 
     public User decrypt(String skey, String encryptedData, String iv) {
-        final User newUser = userService.decryptUser(skey, encryptedData, iv);
+        final User newUser = userService.decryptUser(appId, skey, encryptedData, iv);
         userService.updateUser(newUser);
 
         return newUser;
