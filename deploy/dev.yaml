@@ -2,7 +2,7 @@
 - hosts: centOS7
   remote_user: root
   vars:
-    version: v0.0.7
+    version: v0.0.8
   tasks:
   - name: Download package from jitpack
     get_url:
