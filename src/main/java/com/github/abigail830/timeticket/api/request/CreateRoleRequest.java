@@ -13,7 +13,7 @@ import lombok.*;
 @ApiModel(description = "创建角色请求")
 public class CreateRoleRequest {
 
-    @ApiModelProperty(value = "本尊OpenId", example = "oEmJ75YWmBSDgyz4KLi_yGL8MBV4ue")
+    @ApiModelProperty(value = "本尊OpenId", example = "orQ0R5dfGenexrRFU-74p_l3iXes")
     String ownerOpenId;
 
     @ApiModelProperty(value = "指派人角色", example = "老公")

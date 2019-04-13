@@ -16,7 +16,7 @@ public class DeleteRoleRequest {
     @ApiModelProperty(value = "Ticket Index Id", example = "1")
     Integer ticketIndexId;
 
-    @ApiModelProperty(value = "本尊OpenId", example = "oEmJ75YWmBSDgyz4KLi_yGL8MBV4ue")
+    @ApiModelProperty(value = "本尊OpenId", example = "orQ0R5dfGenexrRFU-74p_l3iXes")
     String ownerOpenId;
 
 }
