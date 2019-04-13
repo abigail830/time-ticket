@@ -1,4 +1,4 @@
-package com.github.abigail830.timeticket.infrastructure.ticket.mapper;
+package com.github.abigail830.timeticket.infrastructure.repository.mapper;
 
 import com.github.abigail830.timeticket.domain.ticket.TicketIndex;
 import org.apache.commons.lang.StringUtils;

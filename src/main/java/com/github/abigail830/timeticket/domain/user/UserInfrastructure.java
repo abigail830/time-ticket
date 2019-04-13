@@ -1,11 +1,11 @@
-package com.github.abigail830.timeticket.domain;
+package com.github.abigail830.timeticket.domain.user;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository {
+public interface UserInfrastructure {
 
-    User addUser(User user);
+    void addUserByOpenId(String openId);
 
     User updateUser(User user);
 
@@ -14,5 +14,7 @@ public interface UserRepository {
     Optional<User> getUserById(String id);
 
     List<User> getAllUsers();
+
+    User login(String appId, String appSecret, String headerCode);
 
 }

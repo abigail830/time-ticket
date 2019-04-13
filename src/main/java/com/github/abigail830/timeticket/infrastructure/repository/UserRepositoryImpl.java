@@ -1,7 +1,6 @@
-package com.github.abigail830.timeticket.infrastructure;
+package com.github.abigail830.timeticket.infrastructure.repository;
 
-import com.github.abigail830.timeticket.domain.User;
-import com.github.abigail830.timeticket.domain.UserRepository;
+import com.github.abigail830.timeticket.domain.user.User;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +23,13 @@ public class UserRepositoryImpl implements UserRepository {
     private RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
 
     @Override
-    public User addUser(User user) {
-        log.info("Going to insert user into DB: {}", user);
-        jdbcTemplate.update("INSERT ignore INTO user_tbl (open_id) VALUES (?)", user.getOpenId());
-        return getUserByOpenId(user.getOpenId()).get();
+    public void addUserByOpenId(String openId) {
+        log.info("Going to insert client into DB with openId: {}", openId);
+        jdbcTemplate.update("INSERT ignore INTO user_tbl (open_id) VALUES (?)", openId);
     }
 
     public User updateUser(User user) {
-        log.info("Going to update user into DB: {}", user);
+        log.info("Going to update client into DB: {}", user);
         jdbcTemplate.update(
                 "UPDATE user_tbl set gender=?, nick_name=?, city=?, country=?, province=?, lang=?, avatar_url=? where open_id=?",
                 user.getGender(),
@@ -59,4 +57,6 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> getAllUsers() {
         return jdbcTemplate.query("SELECT * from user_tbl", rowMapper);
     }
+
+
 }

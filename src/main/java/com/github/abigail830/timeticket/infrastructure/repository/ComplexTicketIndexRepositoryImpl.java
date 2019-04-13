@@ -1,11 +1,11 @@
-package com.github.abigail830.timeticket.infrastructure.ticket;
+package com.github.abigail830.timeticket.infrastructure.repository;
 
-import com.github.abigail830.timeticket.domain.User;
 import com.github.abigail830.timeticket.domain.ticket.Ticket;
 import com.github.abigail830.timeticket.domain.ticket.TicketIndex;
-import com.github.abigail830.timeticket.infrastructure.ticket.mapper.TicketIndexRowMapper;
-import com.github.abigail830.timeticket.infrastructure.ticket.mapper.TicketRowMapper;
-import com.github.abigail830.timeticket.infrastructure.ticket.mapper.UserRowMapper;
+import com.github.abigail830.timeticket.domain.user.User;
+import com.github.abigail830.timeticket.infrastructure.repository.mapper.TicketIndexRowMapper;
+import com.github.abigail830.timeticket.infrastructure.repository.mapper.TicketRowMapper;
+import com.github.abigail830.timeticket.infrastructure.repository.mapper.UserRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

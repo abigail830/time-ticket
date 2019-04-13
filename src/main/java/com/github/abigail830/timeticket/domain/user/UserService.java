@@ -1,62 +1,53 @@
-package com.github.abigail830.timeticket.domain.wx;
+package com.github.abigail830.timeticket.domain.user;
 
+import com.github.abigail830.timeticket.infrastructure.InfraException;
 import com.github.abigail830.timeticket.util.AESUtils;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 
-@Setter
-@Getter
-@Slf4j
-public class WxDomain {
+public class UserService {
 
     private String appId;
     private String appSecret;
-    private WxCommonInterface wxCommonInterface;
+    private UserInfrastructure userInfrastructure;
 
-    private WxLoginInfo wxLoginInfo;
-
-
-    public WxDomain(String appId, String appSecret, WxCommonInterface wxCommonInterface) {
+    @Autowired
+    public UserService(String appId, String appSecret, UserInfrastructure userInfrastructure) {
         this.appId = appId;
         this.appSecret = appSecret;
-        this.wxCommonInterface = wxCommonInterface;
+        this.userInfrastructure = userInfrastructure;
     }
 
-    public WxLoginInfo login(String headerCode) {
+    public void addUserByOpenId(String openId) {
+        userInfrastructure.addUserByOpenId(openId);
+    }
+
+    public User updateUser(User user) {
+        return userInfrastructure.updateUser(user);
+    }
+
+    public boolean isExistUser(String openId) {
+        return userInfrastructure.getUserByOpenId(openId).isPresent();
+    }
+
+    public User login(String headerCode) {
         try {
-            wxLoginInfo = wxCommonInterface.login(appId, appSecret, headerCode);
-            return wxLoginInfo;
+            return userInfrastructure.login(appId, appSecret, headerCode);
+        } catch (InfraException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, ex.getMessage());
 
-        } catch (JsonSyntaxException ex) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY,
-                    "False to parse the result to json from WeChat backend.");
-
-        } catch (RuntimeException runtimeEx) {
-            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY,
-                    "Exception when http login WeChat backend");
         }
     }
 
-    public boolean isLoginSuccess() {
-        if (wxLoginInfo.getOpenid() != null)
-            return Boolean.TRUE;
-        else
-            return Boolean.FALSE;
-    }
-
-
-    public String decryptUser(String skey, String encryptedData, String iv) {
+    public User decryptUser(String skey, String encryptedData, String iv) {
 
         validateInputBeforeDecrypt(skey, iv);
 
@@ -74,7 +65,7 @@ public class WxDomain {
                 if (!StringUtils.equals(id, appId)) {
                     throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, " Illegal Buffer");
                 } else {
-                    return userInfo;
+                    return User.fromJson(userInfo);
                 }
             } else {
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Decrypted Fail");
@@ -93,5 +84,4 @@ public class WxDomain {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, " Illegal IV");
 
     }
-
 }

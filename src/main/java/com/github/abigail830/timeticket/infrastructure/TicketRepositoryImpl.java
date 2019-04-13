@@ -1,9 +1,11 @@
-package com.github.abigail830.timeticket.infrastructure.ticket;
+package com.github.abigail830.timeticket.infrastructure;
 
 import com.github.abigail830.timeticket.domain.ticket.Ticket;
 import com.github.abigail830.timeticket.domain.ticket.TicketIndex;
 import com.github.abigail830.timeticket.domain.ticket.TicketRepository;
-import lombok.extern.slf4j.Slf4j;
+import com.github.abigail830.timeticket.infrastructure.repository.ComplexTicketIndexRepository;
+import com.github.abigail830.timeticket.infrastructure.repository.RawTicketIndexRepository;
+import com.github.abigail830.timeticket.infrastructure.repository.RawTicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Slf4j
 public class TicketRepositoryImpl implements TicketRepository {
 
     private RawTicketRepository rawTicketRepository;

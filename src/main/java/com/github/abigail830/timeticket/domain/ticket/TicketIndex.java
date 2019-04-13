@@ -1,6 +1,6 @@
 package com.github.abigail830.timeticket.domain.ticket;
 
-import com.github.abigail830.timeticket.domain.User;
+import com.github.abigail830.timeticket.domain.user.User;
 import lombok.*;
 
 import java.sql.Timestamp;
