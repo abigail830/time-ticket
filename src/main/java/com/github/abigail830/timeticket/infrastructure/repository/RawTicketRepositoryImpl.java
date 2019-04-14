@@ -76,4 +76,10 @@ public class RawTicketRepositoryImpl implements RawTicketRepository {
         log.info("Deleted Ticket with ticket_index_id = {}", ticketIndexId);
     }
 
+    @Override
+    public void updateStatus(Integer ticketId, String status) {
+        jdbcTemplate.update("UPDATE ticket_tbl set event_status=? where ID=?", status, ticketId);
+        log.info("Updated Ticket {} status to {}", ticketId, status);
+    }
+
 }

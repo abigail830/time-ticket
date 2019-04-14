@@ -13,6 +13,11 @@ public interface TicketRepository {
 
     List<TicketIndex> getTicketIndexByOwnerOpenIdOrderBySumDuration(String ownerOpenId);
 
+    void updateAssigneeAndSumDurationOfTicketIndex(TicketIndex updatedTicket);
+
+    TicketIndex getTicketIndexByIndexId(Integer ticketIndexId);
+
+
     void addTicketToIndex(Ticket ticket);
 
     void updateTicket(Ticket ticket);
@@ -24,4 +29,7 @@ public interface TicketRepository {
     TicketIndex getTicketDetailByIndexId(Integer timeIndexId);
 
     Optional<Ticket> getTicketById(Integer ticketId);
+
+    void updateTicketStatus(Integer ticketId, String status);
+
 }

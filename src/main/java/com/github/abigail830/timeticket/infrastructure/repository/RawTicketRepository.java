@@ -18,4 +18,6 @@ public interface RawTicketRepository {
     void removeTicket(Integer ticketId);
 
     void removeTicketByIndexId(Integer ticketIndexId);
+
+    void updateStatus(Integer ticketId, String status);
 }

@@ -32,10 +32,6 @@ public class UserService {
         return userInfrastructure.updateUser(user);
     }
 
-    public boolean isExistUser(String openId) {
-        return userInfrastructure.getUserByOpenId(openId).isPresent();
-    }
-
     public User login(String appId, String appSecret, String headerCode) {
         try {
             return userInfrastructure.login(appId, appSecret, headerCode);
@@ -82,5 +78,13 @@ public class UserService {
         if (StringUtils.length(iv) != 24)
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, " Illegal IV");
 
+    }
+
+    public boolean isValidAssignee(String assigneeOpenId) {
+        return assigneeOpenId != null && isExistUser(assigneeOpenId);
+    }
+
+    private boolean isExistUser(String openId) {
+        return userInfrastructure.getUserByOpenId(openId).isPresent();
     }
 }

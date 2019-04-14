@@ -72,6 +72,13 @@ public class TicketDetailController {
         return TicketDetailListResponse.fromTicketIndex(ticketIndex);
     }
 
+    @PostMapping("/confirm")
+    public void confirmTicket(@RequestParam Integer ticketId,
+                              @RequestParam Integer ticketIndexId,
+                              @RequestParam String assigneeOpenId) {
+        timeTicketApplicationService.confirmTicket(ticketId, ticketIndexId, assigneeOpenId);
+    }
+
     @ApiOperation(value = "【测试用】获取所有时间小票")
     @GetMapping("/all")
     public List<TicketDetailResponse> getAllSimpleTicketDetail() {

@@ -1,5 +1,6 @@
 package com.github.abigail830.timeticket.domain.ticket;
 
+import com.github.abigail830.timeticket.domain.user.User;
 import com.github.abigail830.timeticket.infrastructure.InfraException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,4 +61,19 @@ public class TicketService {
     }
 
 
+    public Ticket confirmTicket(Integer ticketId) {
+        ticketRepository.updateTicketStatus(ticketId, Ticket.TICKET_STATUS.CONFIRMED.name());
+        return ticketRepository.getTicketById(ticketId).orElse(null);
+    }
+
+    public void updateAssigneeAndSumDuration(Integer ticketIndexId, String assigneeOpenId, Long duration) {
+        TicketIndex ticketIndex = ticketRepository.getTicketIndexByIndexId(ticketIndexId);
+        TicketIndex updatedTicket = new TicketIndex(ticketIndex.getId(),
+                ticketIndex.getOwnerOpenId(),
+                User.builder().openId(assigneeOpenId).build(),
+                ticketIndex.getAssigneeRole(),
+                ticketIndex.getSumDuration() + duration
+        );
+        ticketRepository.updateAssigneeAndSumDurationOfTicketIndex(updatedTicket);
+    }
 }

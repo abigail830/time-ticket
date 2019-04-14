@@ -51,6 +51,11 @@ public class TicketRepositoryImpl implements TicketRepository {
     }
 
     @Override
+    public void updateAssigneeAndSumDurationOfTicketIndex(TicketIndex updatedTicket) {
+        rawTicketIndexRepository.updateAssigneeAndSumDurationOfTicketIndex(updatedTicket);
+    }
+
+    @Override
     public void addTicketToIndex(Ticket ticket) {
         rawTicketRepository.addTicketToIndex(ticket);
     }
@@ -74,6 +79,16 @@ public class TicketRepositoryImpl implements TicketRepository {
     @Override
     public Optional<Ticket> getTicketById(Integer ticketId) {
         return rawTicketRepository.getTicketById(ticketId);
+    }
+
+    @Override
+    public void updateTicketStatus(Integer ticketId, String status) {
+        rawTicketRepository.updateStatus(ticketId, status);
+    }
+
+    @Override
+    public TicketIndex getTicketIndexByIndexId(Integer ticketIndexId) {
+        return rawTicketIndexRepository.getTicketIndexByIndexId(ticketIndexId);
     }
 
     @Override

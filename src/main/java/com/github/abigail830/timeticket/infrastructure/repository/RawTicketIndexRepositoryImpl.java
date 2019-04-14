@@ -48,4 +48,23 @@ public class RawTicketIndexRepositoryImpl implements RawTicketIndexRepository {
                 "SELECT * FROM ticket_index_tbl WHERE owner_open_id = ?", rawTicketIndexRowMapper, ownerOpenId);
         return ticketIndexList;
     }
+
+    @Override
+    public TicketIndex getTicketIndexByIndexId(Integer ticketIndexId) {
+        final List<TicketIndex> query = jdbcTemplate.query("SELECT * from ticket_index_tbl where ID=?",
+                rawTicketIndexRowMapper, ticketIndexId);
+        if (query.isEmpty())
+            return null;
+        else
+            return query.get(0);
+    }
+
+    @Override
+    public void updateAssigneeAndSumDurationOfTicketIndex(TicketIndex updatedTicket) {
+        jdbcTemplate.update("UPDATE ticket_index_tbl set assignee_open_id=?, sum_duration=?  where ID=?",
+                updatedTicket.getAssignee().getOpenId(),
+                updatedTicket.getSumDuration(),
+                updatedTicket.getId());
+        log.info("Updated TicketIndex with new content {}", updatedTicket);
+    }
 }
