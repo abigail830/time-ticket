@@ -2,35 +2,35 @@ package com.github.abigail830.timeticket.infrastructure.repository;
 
 import com.github.abigail830.timeticket.domain.ticket.Ticket;
 import com.github.abigail830.timeticket.domain.ticket.TicketIndex;
-import com.github.abigail830.timeticket.domain.user.User;
-import com.github.abigail830.timeticket.infrastructure.repository.mapper.TicketIndexRowMapper;
-import com.github.abigail830.timeticket.infrastructure.repository.mapper.TicketRowMapper;
-import com.github.abigail830.timeticket.infrastructure.repository.mapper.UserRowMapper;
+import com.github.abigail830.timeticket.infrastructure.repository.po.ComplexTicketIndexPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
 public class ComplexTicketIndexRepositoryImpl implements ComplexTicketIndexRepository {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
-    private RowMapper<TicketIndex> ticketIndexRowMapper = new TicketIndexRowMapper();
-    private RowMapper<Ticket> ticketRowMapper = new TicketRowMapper();
-    private RowMapper<User> userRowMapper = new UserRowMapper();
+    private final JdbcTemplate jdbcTemplate;
+
+    private RowMapper<ComplexTicketIndexPO> rowMapper = new BeanPropertyRowMapper<>(ComplexTicketIndexPO.class);
+
+    @Autowired
+    public ComplexTicketIndexRepositoryImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public TicketIndex getTicketDetailListByIndexId(Integer ticketIndexId) {
-        TicketIndex ticketIndex = jdbcTemplate.query(
+        final List<ComplexTicketIndexPO> result = jdbcTemplate.query(
                 "select ticket_index_tbl.ID as index_id, " +
                         "ticket_index_tbl.owner_open_id as owner_open_id, " +
                         "ticket_index_tbl.assignee_open_id as assignee_open_id, " +
@@ -51,36 +51,19 @@ public class ComplexTicketIndexRepositoryImpl implements ComplexTicketIndexRepos
                         "left join ticket_tbl on ticket_index_tbl.ID = ticket_tbl.ticket_index_id " +
                         "left join user_tbl on ticket_index_tbl.assignee_open_id = user_tbl.open_id " +
                         "where  ticket_index_tbl.ID = ?",
-
-                new ResultSetExtractor<TicketIndex>() {
-                    @Override
-                    public TicketIndex extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-                        TicketIndex ticketIndex = null;
-                        int row = 0;
-                        while (resultSet.next()) {
-                            if (ticketIndex == null) {
-                                ticketIndex = ticketIndexRowMapper.mapRow(resultSet, row);
-                            }
-
-                            User user = userRowMapper.mapRow(resultSet, row);
-                            if (user != null) {
-                                ticketIndex.setAssignee(user);
-                                log.debug("User {}", user);
-                            }
-
-                            Ticket ticket = ticketRowMapper.mapRow(resultSet, row);
-                            if (ticket != null) {
-                                log.debug("Ticket {}", ticket);
-                                ticketIndex.addTicket(ticket);
-                            }
-
-                            row++;
-                        }
-                        return ticketIndex;
-                    }
-                }, ticketIndexId);
+                rowMapper, ticketIndexId);
 
 
-        return ticketIndex;
+        final List<Ticket> tickets = result.stream().map(ComplexTicketIndexPO::toTicketDomain).collect(Collectors.toList());
+
+        final Optional<TicketIndex> ticketIndex = result.stream().map(ComplexTicketIndexPO::toRawTicketIndexDomain).findFirst();
+        if (ticketIndex.isPresent()) {
+            final TicketIndex ticketIndex1 = ticketIndex.get();
+            ticketIndex1.addTickets(tickets);
+            log.info("TicketIndex1 is {}", ticketIndex1);
+            return ticketIndex1;
+        }
+
+        return null;
     }
 }

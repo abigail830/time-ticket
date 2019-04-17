@@ -17,4 +17,5 @@ public interface UserInfrastructure {
 
     User login(String appId, String appSecret, String headerCode);
 
+    void addUser(User user);
 }

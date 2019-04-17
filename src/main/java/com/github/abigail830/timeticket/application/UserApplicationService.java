@@ -72,4 +72,10 @@ public class UserApplicationService {
         return userInfrastructure.getUserById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
+
+    public User createUser(String avatarUrl, String city, String country, String gender,
+                           String lang, String nickName, String openId, String province) {
+        userService.createUser(avatarUrl, city, country, gender, lang, nickName, openId, province);
+        return userInfrastructure.getUserByOpenId(openId).orElse(null);
+    }
 }

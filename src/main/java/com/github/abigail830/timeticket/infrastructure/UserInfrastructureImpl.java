@@ -51,4 +51,9 @@ public class UserInfrastructureImpl implements UserInfrastructure {
     public User login(String appId, String appSecret, String headerCode) {
         return wxClient.login(appId, appSecret, headerCode);
     }
+
+    @Override
+    public void addUser(User user) {
+        userRepository.addUser(user);
+    }
 }

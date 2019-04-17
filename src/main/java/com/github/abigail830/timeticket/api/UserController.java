@@ -1,11 +1,13 @@
 package com.github.abigail830.timeticket.api;
 
+import com.github.abigail830.timeticket.api.request.CreateUserRequest;
 import com.github.abigail830.timeticket.api.response.UserDecryptResponse;
 import com.github.abigail830.timeticket.api.response.UserLoginResponse;
 import com.github.abigail830.timeticket.application.UserApplicationService;
 import com.github.abigail830.timeticket.domain.user.User;
 import com.github.abigail830.timeticket.util.http.JsonUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
+    @ApiOperation(value = "【测试用】查询所有用户")
     public List<User> getAllUsers() {
         return userApplicationService.getAllUsers();
     }
@@ -56,5 +59,18 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@ApiParam(example = "1") @PathVariable String id) {
         return userApplicationService.getUserById(id);
+    }
+
+    @PostMapping
+    @ApiOperation(value = "【测试用】添加用户（只能添加全新用户）")
+    public User addUser(@RequestBody CreateUserRequest createUserRequest) {
+        return userApplicationService.createUser(createUserRequest.getAvatarUrl(),
+                createUserRequest.getCity(),
+                createUserRequest.getCountry(),
+                createUserRequest.getGender(),
+                createUserRequest.getLang(),
+                createUserRequest.getNickName(),
+                createUserRequest.getOpenId(),
+                createUserRequest.getProvince());
     }
 }

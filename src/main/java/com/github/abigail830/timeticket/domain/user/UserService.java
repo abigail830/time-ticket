@@ -87,4 +87,10 @@ public class UserService {
     private boolean isExistUser(String openId) {
         return userInfrastructure.getUserByOpenId(openId).isPresent();
     }
+
+    public void createUser(String avatarUrl, String city, String country, String gender,
+                           String lang, String nickName, String openId, String province) {
+        final User user = new User(openId, gender, nickName, city, country, province, lang, avatarUrl);
+        userInfrastructure.addUser(user);
+    }
 }

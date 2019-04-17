@@ -27,6 +27,18 @@ public class User {
         this.openId = openId;
     }
 
+    public User(String openId, String gender, String nickName, String city,
+                String country, String province, String lang, String avatarUrl) {
+        this.openId = openId;
+        this.gender = gender;
+        this.nickName = nickName;
+        this.city = city;
+        this.country = country;
+        this.province = province;
+        this.lang = lang;
+        this.avatarUrl = avatarUrl;
+    }
+
     public User(String openId, String session_key) {
         this.openId = openId;
         this.session_key = session_key;

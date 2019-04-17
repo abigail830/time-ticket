@@ -2,6 +2,7 @@ package com.github.abigail830.timeticket.infrastructure.repository;
 
 import com.github.abigail830.timeticket.domain.ticket.Ticket;
 import com.github.abigail830.timeticket.infrastructure.InfraException;
+import com.github.abigail830.timeticket.infrastructure.repository.po.TicketPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,28 +13,33 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
 public class RawTicketRepositoryImpl implements RawTicketRepository {
 
+
+    private final JdbcTemplate jdbcTemplate;
+
+    private RowMapper<TicketPO> rawTicketRowMapper = new BeanPropertyRowMapper<>(TicketPO.class);
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    private RowMapper<Ticket> rawTicketRowMapper = new BeanPropertyRowMapper<>(Ticket.class);
-
+    public RawTicketRepositoryImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public List<Ticket> getAllTickets() {
-        final List<Ticket> ticketList = jdbcTemplate.query("SELECT * FROM ticket_tbl", rawTicketRowMapper);
-        return ticketList;
+        final List<TicketPO> result = jdbcTemplate.query("SELECT * FROM ticket_tbl", rawTicketRowMapper);
+        return result.stream().map(TicketPO::toDomain).collect(Collectors.toList());
     }
 
     @Override
     public Optional<Ticket> getTicketById(Integer ticketId) {
-        final List<Ticket> tickets = jdbcTemplate.query("SELECT * FROM ticket_tbl WHERE ID = ?",
+        final List<TicketPO> result = jdbcTemplate.query("SELECT * FROM ticket_tbl WHERE ID = ?",
                 rawTicketRowMapper, ticketId);
-        return tickets.stream().findFirst();
+        return result.stream().findFirst().map(TicketPO::toDomain);
     }
 
     @Override

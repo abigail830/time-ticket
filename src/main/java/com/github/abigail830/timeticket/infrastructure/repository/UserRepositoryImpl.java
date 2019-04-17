@@ -17,10 +17,15 @@ import java.util.Optional;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    @Autowired
+
     private JdbcTemplate jdbcTemplate;
 
     private RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
+
+    @Autowired
+    public UserRepositoryImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public void addUserByOpenId(String openId) {
@@ -56,6 +61,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     public List<User> getAllUsers() {
         return jdbcTemplate.query("SELECT * from user_tbl", rowMapper);
+    }
+
+    @Override
+    public void addUser(User user) {
+        jdbcTemplate.update("INSERT INTO user_tbl (open_id,gender,nick_name,city,country,province,lang,avatar_url) " +
+                        "VALUES (?,?,?,?,?,?,?,?)",
+                user.getOpenId(), user.getGender(), user.getNickName(), user.getCity(),
+                user.getCountry(), user.getProvince(), user.getLang(), user.getAvatarUrl());
+        log.info("Inserted User into DB {}", user);
     }
 
 

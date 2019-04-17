@@ -46,4 +46,8 @@ public class TicketIndex {
     public void addTicket(Ticket ticket) {
         this.ticketList.add(ticket);
     }
+
+    public void addTickets(List<Ticket> tickets) {
+        this.ticketList.addAll(tickets);
+    }
 }

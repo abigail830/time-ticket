@@ -1,6 +1,7 @@
 package com.github.abigail830.timeticket.infrastructure.repository;
 
 import com.github.abigail830.timeticket.domain.ticket.TicketIndex;
+import com.github.abigail830.timeticket.infrastructure.repository.po.TicketIndexPO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -9,23 +10,27 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
 public class RawTicketIndexRepositoryImpl implements RawTicketIndexRepository {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
-    private RowMapper<TicketIndex> rawTicketIndexRowMapper = new BeanPropertyRowMapper<>(TicketIndex.class);
+    private final JdbcTemplate jdbcTemplate;
+    private RowMapper<TicketIndexPO> rawTicketIndexRowMapper = new BeanPropertyRowMapper<>(TicketIndexPO.class);
+
+    @Autowired
+    public RawTicketIndexRepositoryImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public void addTicketIndex(TicketIndex ticketIndex) {
         jdbcTemplate.update(
-                "INSERT INTO ticket_index_tbl (owner_open_id, assignee_role, sum_duration) VALUES (?,?,?)",
+                "INSERT INTO ticket_index_tbl (owner_open_id, assignee_role) VALUES (?,?)",
                 ticketIndex.getOwnerOpenId(),
-                ticketIndex.getAssigneeRole(),
-                ticketIndex.getSumDuration()
+                ticketIndex.getAssigneeRole()
         );
         log.info("Created {}", ticketIndex.toString());
     }
@@ -44,19 +49,16 @@ public class RawTicketIndexRepositoryImpl implements RawTicketIndexRepository {
 
     @Override
     public List<TicketIndex> getTicketIndexByOwnerOpenIdOrderBySumDuration(String ownerOpenId) {
-        List<TicketIndex> ticketIndexList = jdbcTemplate.query(
+        final List<TicketIndexPO> result = jdbcTemplate.query(
                 "SELECT * FROM ticket_index_tbl WHERE owner_open_id = ?", rawTicketIndexRowMapper, ownerOpenId);
-        return ticketIndexList;
+        return result.stream().map(TicketIndexPO::toDomain).collect(Collectors.toList());
     }
 
     @Override
     public TicketIndex getTicketIndexByIndexId(Integer ticketIndexId) {
-        final List<TicketIndex> query = jdbcTemplate.query("SELECT * from ticket_index_tbl where ID=?",
+        final List<TicketIndexPO> query = jdbcTemplate.query("SELECT * from ticket_index_tbl where ID=?",
                 rawTicketIndexRowMapper, ticketIndexId);
-        if (query.isEmpty())
-            return null;
-        else
-            return query.get(0);
+        return query.stream().findFirst().map(TicketIndexPO::toDomain).orElse(null);
     }
 
     @Override

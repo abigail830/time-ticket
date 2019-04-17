@@ -16,4 +16,6 @@ public interface UserRepository {
     Optional<User> getUserById(String id);
 
     List<User> getAllUsers();
+
+    void addUser(User user);
 }
