@@ -50,7 +50,7 @@ public class RawTicketIndexRepositoryImpl implements RawTicketIndexRepository {
     @Override
     public List<TicketIndex> getTicketIndexByOwnerOpenIdOrderBySumDuration(String ownerOpenId) {
         final List<TicketIndexPO> result = jdbcTemplate.query(
-                "SELECT * FROM ticket_index_tbl WHERE owner_open_id = ?", rawTicketIndexRowMapper, ownerOpenId);
+                "SELECT * FROM ticket_index_tbl WHERE owner_open_id = ? ORDER BY sum_duration DESC", rawTicketIndexRowMapper, ownerOpenId);
         return result.stream().map(TicketIndexPO::toDomain).collect(Collectors.toList());
     }
 
