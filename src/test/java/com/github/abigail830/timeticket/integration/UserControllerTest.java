@@ -14,9 +14,9 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.junit.Assert.*;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-//        properties = {"spring.datasource.url=jdbc:h2:mem:UserControllerTest;DB_CLOSE_DELAY=-1;MODE=MYSQL"})
-
+/**
+ * Demo for testing controller with rest-assured
+ */
 public class UserControllerTest extends IntegrationTestBase {
 
     @Test
@@ -77,7 +77,6 @@ public class UserControllerTest extends IntegrationTestBase {
 
         assertNotNull(result);
         assertNull(result.getId());
-//        assertEquals("OPENID_3", result.getOpenId());
 
     }
 
