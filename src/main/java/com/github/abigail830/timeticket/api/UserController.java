@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @Slf4j
 @Api(description = "小程序相关登录和解密API")
 public class UserController {
@@ -48,6 +48,7 @@ public class UserController {
     @GetMapping("/all")
     @ApiOperation(value = "【测试用】查询所有用户")
     public List<User> getAllUsers() {
+        log.info("getting all users");
         return userApplicationService.getAllUsers();
     }
 
