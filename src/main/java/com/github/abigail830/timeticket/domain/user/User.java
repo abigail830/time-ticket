@@ -1,5 +1,6 @@
 package com.github.abigail830.timeticket.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.abigail830.timeticket.util.http.JsonUtil;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 
     private Integer id;

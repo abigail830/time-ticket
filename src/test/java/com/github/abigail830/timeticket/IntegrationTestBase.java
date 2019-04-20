@@ -16,7 +16,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, MockitoTestExecutionListener.class})
-public class IntegrationBase {
+public class IntegrationTestBase {
 
     @LocalServerPort
     public int port;
