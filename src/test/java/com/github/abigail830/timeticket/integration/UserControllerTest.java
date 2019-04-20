@@ -61,6 +61,27 @@ public class UserControllerTest extends IntegrationTestBase {
     }
 
     @Test
+    public void should_get_404_if_openid_not_exist() {
+
+        final User result =
+                given()
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .queryParam("openId", "NOT_EXIST")
+                        .when()
+                        .get("/users")
+                        .then()
+                        .statusCode(HttpStatus.NOT_FOUND.value())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .extract()
+                        .as(User.class);
+
+        assertNotNull(result);
+        assertNull(result.getId());
+//        assertEquals("OPENID_3", result.getOpenId());
+
+    }
+
+    @Test
     public void should_add_new_user_when_post() {
 
         CreateUserRequest request = CreateUserRequest.builder()
