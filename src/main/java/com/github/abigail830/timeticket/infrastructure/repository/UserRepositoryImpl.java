@@ -18,7 +18,7 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
 
-    private JdbcTemplate jdbcTemplate;
+    protected JdbcTemplate jdbcTemplate;
 
     private RowMapper<User> rowMapper = new BeanPropertyRowMapper<>(User.class);
 
@@ -72,5 +72,18 @@ public class UserRepositoryImpl implements UserRepository {
         log.info("Inserted User into DB {}", user);
     }
 
+    @Override
+    public void deleteAll() {
+        String deleteSQL = "DELETE FROM user_tbl";
+        jdbcTemplate.update(deleteSQL);
+        log.info("User Table cleaned up");
+    }
+
+    @Override
+    public void deleteUserByOpenId(String openId) {
+        String deleteSQL = "DELETE FROM user_tbl WHERE open_id = ?";
+        jdbcTemplate.update(deleteSQL, openId);
+        log.info("User {} cleaned up", openId);
+    }
 
 }

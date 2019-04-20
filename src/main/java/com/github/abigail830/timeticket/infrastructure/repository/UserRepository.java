@@ -18,4 +18,8 @@ public interface UserRepository {
     List<User> getAllUsers();
 
     void addUser(User user);
+
+    void deleteUserByOpenId(String openId);
+
+    void deleteAll();
 }
