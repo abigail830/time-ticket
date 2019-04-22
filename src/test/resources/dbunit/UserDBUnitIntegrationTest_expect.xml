@@ -1,0 +1,5 @@
+<dataset>
+    <user_tbl id="1" open_id="OPENID_1" nick_name="NICK_NAME1" avatar_url="URL1"/>
+    <user_tbl id="2" open_id="OPENID_2" nick_name="NICK_NAME2" avatar_url="URL2"/>
+    <user_tbl id="3" open_id="OPENID_3" avatar_url="URL3"/>
+</dataset>

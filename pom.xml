@@ -96,6 +96,7 @@
 			<artifactId>gson</artifactId>
 		</dependency>
 
+		<!--swagger-->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -106,12 +107,15 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${swagger.version}</version>
 		</dependency>
+
+		<!--encryption-->
 		<dependency>
 			<groupId>com.github.ulisesbocchio</groupId>
 			<artifactId>jasypt-spring-boot-starter</artifactId>
 			<version>${jasypt.version}</version>
 		</dependency>
 
+		<!--ok-http-->
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
@@ -133,6 +137,7 @@
 			<version>1.55</version>
 		</dependency>
 
+		<!--rest-assured-->
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
@@ -150,12 +155,22 @@
 			<version>3.3.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
-		<!--<dependency>-->
-		<!--<groupId>org.springframework</groupId>-->
-		<!--<artifactId>spring-web</artifactId>-->
-		<!--<version>5.1.6.RELEASE</version>-->
-		<!--</dependency>-->
+
+		<!--db unit-->
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.5.0</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.springtestdbunit</groupId>
+			<artifactId>spring-test-dbunit</artifactId>
+			<version>1.2.0</version>
+			<scope>test</scope>
+		</dependency>
+
 
 	</dependencies>
 
